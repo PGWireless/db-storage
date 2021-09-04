@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "yiisoft/yii2-mongodb": "^2.1"
+        "yiisoft/yii2-mongodb": "~2.1"
     },
     "replace": {
         "bower-asset/jquery": "*",
