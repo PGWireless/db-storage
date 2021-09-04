@@ -1,0 +1,16 @@
+{
+    "name": "pgwireless/db-storage",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "DBStorage\\Codec\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lixin",
+            "email": "lixin_gg@126.com"
+        }
+    ],
+    "require": {}
+}
