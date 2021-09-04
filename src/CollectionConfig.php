@@ -52,6 +52,11 @@ class CollectionConfig implements CodecInterface
         return $field;
     }
 
+    public function makeSimpleFieldConfig()
+    {
+        return new FieldConfig($this->_secretKey);
+    }
+
     public function setCodec(CodecInterface $codec)
     {
         $this->_codec = $codec;
