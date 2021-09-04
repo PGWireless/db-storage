@@ -1,20 +1,20 @@
 {
     "name": "pgwireless/db-storage",
     "type": "library",
-    "autoload": {
-        "psr-4": {
-            "DBStorage\\Codec\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "lixin",
             "email": "lixin_gg@126.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "yiisoft/yii2-mongodb": "~2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DBStorage\\Codec\\": "src/"
+        }
     },
     "replace": {
         "bower-asset/jquery": "*",
