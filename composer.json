@@ -12,6 +12,7 @@
             "email": "lixin_gg@126.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2-mongodb": "~2.1"
     },
