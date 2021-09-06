@@ -19,7 +19,6 @@ class MongoCollectionConfig extends CollectionConfig
         }
 
         $this->_decode($value);
-
         return $value;
     }
 

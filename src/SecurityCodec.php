@@ -4,7 +4,7 @@ namespace DBStorage\Codec;
 
 class SecurityCodec implements CodecInterface
 {
-    const DEFAULT_IV = 'IaJnDsgUunjASLN5';
+    const DEFAULT_IV = '5jd596C03wj0BAvzieGsqg==';
 
     private $key;
     private $iv;
@@ -12,6 +12,9 @@ class SecurityCodec implements CodecInterface
     public function __construct($key, $iv = self::DEFAULT_IV)
     {
         $this->key = $key;
+        if ($iv === self::DEFAULT_IV) {
+            $iv = base64_decode($iv);
+        }
         $this->iv = $iv;
     }
 

@@ -15,11 +15,11 @@ final class DynamicCodec implements CodecInterface
 
     public function encode($value)
     {
-        return ($this->_encoder)($value);
+        return call_user_func($this->_encoder, $value);
     }
 
     public function decode($value)
     {
-        return ($this->_decoder)($value);
+        return call_user_func($this->_decoder, $value);
     }
 }

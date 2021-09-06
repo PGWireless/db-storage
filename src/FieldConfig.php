@@ -10,10 +10,12 @@ class FieldConfig implements CodecWithParamsInterface
     const SECURITY = 2;
 
     public $codecType = self::SECURITY; // HASH or SECURITY
+    public $afterDecoded; // 成功 decode 后执行的函数
     public $codecWithField;
     public $codecFuncs = [];
-    // 解密失败时返回原值，否则返回 false
-    public $returnOriginalValueWhenDecryptedFailed = false;
+    // 解密失败时是否返回原值
+    // 当配置为 false 时，解密失败返回 false
+    public $returnOriginalValueWhenDecryptedFailed = true;
 
     private $_secretKey = '';
 
@@ -30,7 +32,7 @@ class FieldConfig implements CodecWithParamsInterface
     public function init()
     {
         if (!empty($this->codecFuncs)) {
-            if (count($this->codecFuncs) !== 2) {
+            if (!is_array($this->codecFuncs) || count($this->codecFuncs) !== 2) {
                 throw new InvalidArgumentException('Invalid property "codecFuncs" configured');
             }
             if (!is_callable($this->codecFuncs[0]) || !is_callable($this->codecFuncs[1])) {
@@ -53,7 +55,7 @@ class FieldConfig implements CodecWithParamsInterface
             $this->_encoder = function ($key, $value) {
                 return StaticSecurityCodec::encode($key, $value);
             };
-            $this->_decoder = function($key, $value) {
+            $this->_decoder = function ($key, $value) {
                 return StaticSecurityCodec::decode($key, $value);
             };
         } else {
@@ -66,16 +68,16 @@ class FieldConfig implements CodecWithParamsInterface
         if (!$value) {
             return '';
         }
-        
+
         $key = $this->_secretKey;
         if ($this->codecWithField) {
-            if ( empty($params[$this->codecWithField])) {
+            if (empty($params[$this->codecWithField])) {
                 throw new CodecException('"codecWithField" is empty');
             }
             $key .= $params[$this->codecWithField];
         }
 
-        return ($this->_encoder)($key, $value);
+        return call_user_func($this->_encoder, $key, $value);
     }
 
     public function decode($value, array $params = [])
@@ -92,10 +94,14 @@ class FieldConfig implements CodecWithParamsInterface
             $key .= $params[$this->codecWithField];
         }
 
-        $data = ($this->_decoder)($key, $value);
+        $data = call_user_func($this->_decoder, $key, $value);
 
         if ($data === false && $this->returnOriginalValueWhenDecryptedFailed) {
             return $value;
+        }
+
+        if ($this->afterDecoded) {
+            return call_user_func($this->afterDecoded, $data);
         }
 
         return $data;

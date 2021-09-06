@@ -5,14 +5,13 @@ namespace DBStorage\Codec\Adapter;
 use Yii;
 use yii\base\Component;
 use InvalidArgumentException;
-use DBStorage\Codec\FieldConfig;
 use DBStorage\Codec\ProjectConfig;
 use DBStorage\Codec\CollectionConfig;
 use DBStorage\Codec\SecretKeyGetterInterface;
 
 class PGMongoStorageComponent extends Component
 {
-    const DEFAULT_NAME = 'pg-mongo-storage';
+    const DEFAULT_NAME = 'pg.mongo.storage';
 
     public $secretKeyName;
 
@@ -28,12 +27,16 @@ class PGMongoStorageComponent extends Component
      * [
      *  'user' => [
      *      // 配置 email 字段
-     *      'email' => ['security|hash', 'codecWithField', 'codecFuncs', 'returnOriginal']
+     *      'email' => ['security|hash', 'trim', 'codecWithField', 'codecFuncs', 'returnOriginal']
      *      // 多层级的字段
      *      'third.email' => ['security|hash'],
+     *      'mobile' => 2, // security
      *  ],
      * 'login_record' => [
      *      // fields ...
+     *      // 数组方式配置
+     *      [['field_1', 'field_2'], 'security', 'trim', 'codecWithField', 'codecFuncs', 'returnOriginal'],
+     *      [['field_3', 'field_3'], 'hash'],
      * ],
      * ]
      * ```
@@ -104,29 +107,10 @@ class PGMongoStorageComponent extends Component
             return null;
         }
 
-        $collection = $this->getProjectConfig()->makeCollectionConfig();
+        $project    = $this->getProjectConfig();
+        $collection = $project->makeCollectionConfig();
 
-        foreach ($this->collections[$name] as $key => $fieldParams) {
-            $field = $collection->makeSimpleFieldConfig();
-            foreach ($fieldParams as $i => $v) {
-                switch ($i) {
-                    case 0:
-                        $field->codecType = $v === 'security' ? FieldConfig::SECURITY : FieldConfig::HASH;
-                        break;
-                    case 1:
-                        $field->codecWithField = $v;
-                        break;
-                    case 2:
-                        $field->codecFuncs = $v;
-                        break;
-                    case 3:
-                        $field->returnOriginalValueWhenDecryptedFailed = boolval($v);
-                        break;
-                }
-            }
-
-            $collection->setFieldConfig($key, $field);
-        }
+        $collection->fields = $project->makeFields($this->collections[$name]);
 
         $this->_collectionConfigs[$name] = $collection;
 

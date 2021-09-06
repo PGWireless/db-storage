@@ -37,12 +37,14 @@ class CollectionConfig implements CodecInterface
      */
     public function makeFieldConfig(
         $type = FieldConfig::SECURITY,
+        $afterDecoded = null,
         $codecWithField = '',
         array $codecFuncs = [],
         $returnOriginalValueWhenDecryptedFailed = false
     ) {
         $field = new FieldConfig($this->_secretKey);
         $field->codecType = $type;
+        $field->afterDecoded = $afterDecoded;
         $field->codecWithField = $codecWithField;
         $field->codecFuncs = $codecFuncs;
         $field->returnOriginalValueWhenDecryptedFailed = $returnOriginalValueWhenDecryptedFailed;

@@ -10,6 +10,12 @@ class MongoCodec
 
     private static $_instances = [];
 
+    /**
+     * get instance
+     *
+     * @param string $storageName
+     * @return static
+     */
     public static function instance($storageName)
     {
         if (!isset(self::$_instances[$storageName])) {

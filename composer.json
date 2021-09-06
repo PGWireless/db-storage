@@ -9,25 +9,12 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "yiisoft/yii2-mongodb": "~2.1"
+        "ext-curl": "^7.0",
+        "yiisoft/yii2": "~2.0.0"
     },
     "autoload": {
         "psr-4": {
             "DBStorage\\Codec\\": "src/"
         }
-    },
-    "replace": {
-        "bower-asset/jquery": "*",
-        "bower-asset/jquery.inputmask": "*",
-        "bower-asset/inputmask": "*",
-        "bower-asset/punycode": "*",
-        "bower-asset/yii2-pjax": "*"
-      },
-      "conflict": {
-        "bower-asset/jquery": "*",
-        "bower-asset/jquery.inputmask": "*",
-        "bower-asset/inputmask": "*",
-        "bower-asset/punycode": "*",
-        "bower-asset/yii2-pjax": "*"
-      }
+    }
 }

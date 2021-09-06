@@ -32,10 +32,10 @@ $secretKey = new SecretKey('pub_key_123');
 $projectConfig = new ProjectConfig('usercenter', $secretKey);
 
 $userCollection = $projectConfig->makeCollectionConfig([
-    'email'         => newFieldConfig(FieldConfig::SECURITY),
-    'mobile'        => newFieldConfig(FieldConfig::SECURITY),
-    'address'       => newFieldConfig(FieldConfig::HASH),
-    'expand.mobile' => newFieldConfig(FieldConfig::SECURITY),
+    'email'     => newFieldConfig(FieldConfig::SECURITY),
+    'mobile'    => newFieldConfig(FieldConfig::SECURITY),
+    'address'   => newFieldConfig(FieldConfig::HASH),
+    'expand.id' => newFieldConfig(FieldConfig::SECURITY),
 ]);
 
 $projectConfig->setCollection('user', $userCollection);
@@ -43,6 +43,7 @@ $projectConfig->setCollection('user', $userCollection);
 $where = [
     'id'      => 123,
     'email'   => 'abc@qq.com',
+    'time' => new \MongoDB\BSON\ObjectId(),
     'mobile'  => '',
     'address' => '',
     '$and'    => [
@@ -54,6 +55,7 @@ $where = [
             ['age'      => ['$gt' => 5]],
             ['address'  => '四川成都'],
             ['mobile'   => ['$eq' => '13012345678']],
+            ['expand.id' => ['$in' => [2, 3]]],
         ]],
     ],
 ];
