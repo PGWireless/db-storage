@@ -37,7 +37,7 @@ class SecretKeyMemCache implements SecretKeyCacheInterface
 
         syslog(LOG_WARNING, 'can not use cache, check extensions of apcu or yac');
     }    
-    
+
     public function set($name, $value)
     {
         $name .= "kms:";

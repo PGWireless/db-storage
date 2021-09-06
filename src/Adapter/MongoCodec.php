@@ -76,7 +76,7 @@ class MongoCodec
         return $value;
     }
 
-    private function getCodec($collectionName)
+    public function getCodec($collectionName)
     {
         $ins = PGMongoStorageComponent::instance($this->storageName);
         if ($ins) {
@@ -86,7 +86,7 @@ class MongoCodec
         return null;
     }
 
-    private function getFieldCodec($collectionName, $fieldName)
+    public function getFieldCodec($collectionName, $fieldName)
     {
         if ($coll = $this->getCodec($collectionName)) {
             return $coll->getFieldCodec($fieldName);

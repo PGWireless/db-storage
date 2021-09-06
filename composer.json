@@ -9,7 +9,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "ext-curl": "^7.0",
+        "ext-curl": "*",
         "yiisoft/yii2": "~2.0.0"
     },
     "autoload": {

@@ -43,7 +43,6 @@ $projectConfig->setCollection('user', $userCollection);
 $where = [
     'id'      => 123,
     'email'   => 'abc@qq.com',
-    'time' => new \MongoDB\BSON\ObjectId(),
     'mobile'  => '',
     'address' => '',
     '$and'    => [
