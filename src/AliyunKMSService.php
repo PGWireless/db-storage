@@ -58,7 +58,7 @@ class AliyunKMSService implements SecretKeyGetterInterface
         if (!$this->accessKeyId && isset($_SERVER['KMS_ACCESS_ID'])) {
             $this->accessKeyId = $_SERVER['KMS_ACCESS_ID'];
         }
-        if (!$this->accessKeyId && isset($_SERVER['KMS_ACCESS_SECRET'])) {
+        if (!$this->accessKeySecret && isset($_SERVER['KMS_ACCESS_SECRET'])) {
             $this->accessKeySecret = $_SERVER['KMS_ACCESS_SECRET'];
         }
 

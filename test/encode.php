@@ -1,44 +1,27 @@
 <?php
 
 use DBStorage\Codec\FieldConfig;
+use DBStorage\Codec\FixedSecretKey;
 use DBStorage\Codec\ProjectConfig;
-use DBStorage\Codec\MongoCollectionConfig;
-use DBStorage\Codec\SecretKeyGetterInterface;
 
 require '../vendor/autoload.php';
 
-class SecretKey implements SecretKeyGetterInterface
-{
-    private $key;
-    public function __construct($key)
-    {
-        $this->key = $key;
-    }
 
-    public function getSecretKey($name)
-    {
-        return $this->key;
-    }
-}
+$projectConfig = new ProjectConfig('usercenter', new FixedSecretKey('pub_key_123'));
 
-function newFieldConfig($type) {
-    $c = new FieldConfig('pub_key_123');
-    $c->codecType = $type;
-    $c->init();
-    return $c;
-}
-
-$secretKey = new SecretKey('pub_key_123');
-$projectConfig = new ProjectConfig('usercenter', $secretKey);
-
-$userCollection = $projectConfig->makeCollectionConfig([
-    'email'     => newFieldConfig(FieldConfig::SECURITY),
-    'mobile'    => newFieldConfig(FieldConfig::SECURITY),
-    'address'   => newFieldConfig(FieldConfig::HASH),
-    'expand.id' => newFieldConfig(FieldConfig::SECURITY),
-]);
-
-$projectConfig->setCollection('user', $userCollection);
+$projectConfig->setCollection('user', $projectConfig->makeCollectionConfig(
+    $projectConfig->makeFields([
+        'email'     => FieldConfig::SECURITY,
+        'mobile'    => 'security',
+        'address'   => 'hash',
+        'expand.id' => 'security',
+        'field_1'   => ['security', '', '', [function ($key, $value) {
+            return $value . '|' . $value;
+        }, function ($key, $value) {
+            return explode('|', $value, 2)[0];
+        }]],
+    ])
+));
 
 $where = [
     'id'      => 123,
@@ -59,5 +42,7 @@ $where = [
     ],
 ];
 
-$res = $projectConfig->getCodec('user')->encode($where);
+$userCodec = $projectConfig->getCodec('user');
+
+$res = $userCodec->encode($where);
 print_r($res);
