@@ -40,7 +40,7 @@ class FieldConfig implements CodecWithParamsInterface
             }
 
             $this->_encoder = $this->codecFuncs[0];
-            $this->_decoder = $this->codecFuncs[0];
+            $this->_decoder = $this->codecFuncs[1];
             return;
         }
 
